@@ -127,10 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="input_handler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shapes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="input_handler.h" />
     <ClInclude Include="shapes.h" />
   </ItemGroup>
   <ItemGroup>
