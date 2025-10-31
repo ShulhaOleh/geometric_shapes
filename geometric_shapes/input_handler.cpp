@@ -15,6 +15,7 @@ extern std::atomic<float> rotation_speed;
 extern std::mutex shape_mutex;
 extern std::mutex input_mutex;
 extern std::string input_buffer;
+extern std::atomic<char> draw_char;
 
 // Splits a string into parts by a separator
 std::vector<std::string> split(const std::string& str, char delimiter) {
@@ -86,6 +87,12 @@ void handle_speed_command(const std::vector<std::string>& parts) {
         rotation_speed = speed;
 }
 
+// Command handler: changes drawing symbol
+void handle_char_command(const std::vector<std::string>& parts) {
+    if (parts.size() > 1 && !parts[1].empty())
+        draw_char = parts[1][0];
+}
+
 // Main command processor: parses and routes commands to appropriate handlers
 void process_command(const std::string& command) {
     auto parts = split(command, ' ');
@@ -106,6 +113,9 @@ void process_command(const std::string& command) {
     }
     else if (cmd == "speed" || cmd == "sp") {
         handle_speed_command(parts);
+    }
+    else if (cmd == "char" || cmd == "ch") {
+        handle_char_command(parts);
     }
     else if (cmd == "quit" || cmd == "q") {
         running = false;

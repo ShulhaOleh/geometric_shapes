@@ -12,6 +12,7 @@ void handle_square_command(const std::vector<std::string>& parts);
 void handle_circle_command(const std::vector<std::string>& parts);
 void handle_rectangle_command(const std::vector<std::string>& parts);
 void handle_speed_command(const std::vector<std::string>& parts);
+void handle_char_command(const std::vector<std::string>& parts);
 void process_command(const std::string& command);
 
 void handle_keypress(char ch);

@@ -22,6 +22,7 @@ std::atomic<float> shape_size(0.5f);
 std::atomic<float> shape_width(0.75f);
 std::atomic<float> shape_height(0.375f);
 std::atomic<float> rotation_speed(0.005f);
+std::atomic<char> draw_char('*');
 
 // Gets current console dimensions
 // Returns true if successful, updates width and height parameters
@@ -58,7 +59,7 @@ int main()
 
     float aspect = (float)width / (float)height;
     float pixel_aspect = 11.0f / 24.0f;
-	int fps = 120; // set lower number for better performance
+	int fps = 120; // Set lower number for better performance
 	float speed = 0.05f;
     float const PI = 3.14159265359f;
     float angle = PI / 4;
@@ -121,9 +122,10 @@ int main()
 
                 {
                     std::lock_guard<std::mutex> lock(shape_mutex);
-                    if      (current_shape == 0) pixel = square(xr, yr, shape_size.load()) ? '*' : ' ';
-                    else if (current_shape == 1) pixel = circle(xr, yr, shape_size.load()) ? 'O' : ' ';
-                    else if (current_shape == 2) pixel = rectangle(xr, yr, shape_width.load(), shape_height.load()) ? '#' : ' ';
+                    char ch = draw_char.load();
+                    if (current_shape == 0) pixel = square(xr, yr, shape_size.load()) ? ch : ' ';
+                    else if (current_shape == 1) pixel = circle(xr, yr, shape_size.load()) ? ch : ' ';
+                    else if (current_shape == 2) pixel = rectangle(xr, yr, shape_width.load(), shape_height.load()) ? ch : ' ';
                 }
 
                 // If nothing else, draw an empty pixel
@@ -150,7 +152,7 @@ int main()
         for (int i = status.length(); i < width; i++) std::cout << " ";
         std::cout << "\n";
 
-        std::cout << "Commands: s [size] | c [radius] | r [width] [height] | speed [value] | q = quit";
+        std::cout << "Commands: s [size] | c [radius] | r [w] [h] | speed [val] | char [symbol] | q";
         for (int i = 78; i < width; i++) std::cout << " ";
         std::cout << "\n";
 
