@@ -1,0 +1,19 @@
+# Build folders
+x64/
+Debug/
+Release/
+
+# Visual Studio files
+*.user
+*.suo
+*.unsuccessfulbuild
+*.log
+*.tlog
+*.ilk
+*.idb
+*.pdb
+*.exe
+*.obj
+
+# VS temporary files
+.vs/
