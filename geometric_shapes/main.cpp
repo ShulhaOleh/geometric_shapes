@@ -51,7 +51,7 @@ int main()
         height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
     }
 
-	// Hide cursor
+    // Hide cursor
     std::cout << "\x1b[?25l";
 
     // For console's input line
@@ -59,8 +59,8 @@ int main()
 
     float aspect = (float)width / (float)height;
     float pixel_aspect = 11.0f / 24.0f;
-	int fps = 120; // Set lower number for better performance
-	float speed = 0.05f;
+    int fps = 120; // Set lower number for better performance
+    float speed = 0.05f;
     float const PI = 3.14159265359f;
     float angle = PI / 4;
 
@@ -137,23 +137,37 @@ int main()
         std::cout << "\x1b[H";
         std::cout << screen;
 
-        std::string status = "Shape: ";
+        std::string status = "Status: ";
         int shape = current_shape.load();
         if (shape == 0)
-            status += "Square (size: " + std::to_string(shape_size.load()).substr(0, 4) + ")";\
+            status += "Square (size: " + std::to_string(shape_size.load()).substr(0, 4) + ")";
         else if (shape == 1)
             status += "Circle (radius: " + std::to_string(shape_size.load()).substr(0, 4) + ")";
         else if (shape == 2)
             status += "Rectangle (w: " + std::to_string(shape_width.load()).substr(0, 4) +
-                ", h: " + std::to_string(shape_height.load()).substr(0, 4) + ")";
+            ", h: " + std::to_string(shape_height.load()).substr(0, 4) + ")";
 
         status += " | Speed: " + std::to_string(rotation_speed.load()).substr(0, 5);
+        status += " | Symbol: '" + std::string(1, draw_char.load()) + "'";
         std::cout << status;
         for (int i = status.length(); i < width; i++) std::cout << " ";
         std::cout << "\n";
 
-        std::cout << "Commands: s [size] | c [radius] | r [w] [h] | speed [val] | char [symbol] | q";
-        for (int i = 78; i < width; i++) std::cout << " ";
+        std::cout << "Shapes: square s [size] | circle c [radius] | rectangle r [w] [h]";
+        for (int i = 68; i < width; i++) std::cout << " ";
+        std::cout << "\n";
+
+        std::string actions = "Actions: ";
+        if (shape == 0)
+            actions += "size sz [val]";
+        else if (shape == 1)
+            actions += "radius rad [val]";
+        else if (shape == 2)
+            actions += "dim d [w] [h]";
+        actions += " | speed sp [val] | char ch [c] | quit q";
+
+        std::cout << actions;
+        for (int i = actions.length(); i < width; i++) std::cout << " ";
         std::cout << "\n";
 
         std::lock_guard<std::mutex> lock(input_mutex);

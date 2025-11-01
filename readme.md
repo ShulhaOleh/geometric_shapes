@@ -22,6 +22,7 @@ A console C++ application that renders rotating geometric shapes with customizab
 | `circle [radius]` | `c [radius]` | Switch to circle shape with optional radius | `c 0.6` |
 | `rectangle [width] [height]` | `r [width] [height]` | Switch to rectangle with optional dimensions | `r 1.2 0.5` |
 | `speed [value]` | `sp [value]` | Change rotation speed (0.0 - 0.1) | `speed 0.01` |
+| `char [symbol]` | `ch [symbol]` | Change drawing character for all shapes | `char @` |
 | `quit` | `q` | Exit application | `q` |
 
 ## Building from Source
