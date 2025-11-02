@@ -8,8 +8,8 @@ A console C++ application that renders rotating geometric shapes with customizab
 
 | Platform | Download Link |
 |----------|---------------|
-| Windows x64 | [geometric_shapes_x64.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/download/v1.0/geometric_shapes_x64.exe) |
-| Windows x86 | [geometric_shapes_x86.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/download/v1.0/geometric_shapes_x86.exe) |
+| Windows x64 | [geometric_shapes_x64.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/download/v1.1/geometric_shapes_x64.exe) |
+| Windows x86 | [geometric_shapes_x86.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/download/v1.1/geometric_shapes_x86.exe) |
 
 ## System Requirements
 
@@ -23,8 +23,11 @@ A console C++ application that renders rotating geometric shapes with customizab
 | `square [size]` | `s [size]` | Switch to square shape with optional size | `s 0.8` |
 | `circle [radius]` | `c [radius]` | Switch to circle shape with optional radius | `c 0.6` |
 | `rectangle [width] [height]` | `r [width] [height]` | Switch to rectangle with optional dimensions | `r 1.2 0.5` |
+| `size [value]` | `sz [value]` | Update square size (only works for square) | `sz 0.9` |
+| `radius [value]` | `rad [value]` | Update circle radius (only works for circle) | `rad 0.7` |
+| `dim [width] [height]` | `d [width] [height]` | Update rectangle dimensions (only works for rectangle) | `d 1.5 0.6` |
 | `speed [value]` | `sp [value]` | Change rotation speed (0.0 - 0.1) | `speed 0.01` |
-| `char [symbol]` | `ch [symbol]` | Change drawing character for all shapes | `char @` |
+| `char [symbol]` | `ch [symbol]` | Change drawing character | `char @` |
 | `quit` | `q` | Exit application | `q` |
 
 ## Building from Source
