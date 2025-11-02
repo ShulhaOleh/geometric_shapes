@@ -1,3 +1,5 @@
+![Demo](resources/Demo.gif)
+
 # Animated Shapes
 
 A console C++ application that renders rotating geometric shapes with customizable parameters.
