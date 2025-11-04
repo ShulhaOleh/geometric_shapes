@@ -41,7 +41,7 @@ A console C++ application that renders rotating geometric shapes with customizab
 
 1. Clone the repository:
 ```bash
-   git clone https://github.com/YOUR_USERNAME/geometric_shapes.git
+   git clone https://github.com/ShulhaOleh/geometric_shapes
    cd geometric_shapes
 ```
 
