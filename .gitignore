@@ -1,19 +1,30 @@
-# Build folders
-x64/
-Debug/
-Release/
+# Build outputs
+build/
+
+# Release binaries
+# I keep all stable versions of .exe files (v1.0, v1.1, etc.) locally
+releases/
 
 # Visual Studio files
+.vs/
 *.user
+*.aps
 *.suo
-*.unsuccessfulbuild
-*.log
-*.tlog
-*.ilk
-*.idb
-*.pdb
+*.sdf
+*.opensdf
+*.db
+*.opendb
 *.exe
 *.obj
-
-# VS temporary files
-.vs/
+*.pdb
+*.idb
+*.ipdb
+*.iobj
+*.ilk
+*.log
+*.tlog
+*.res
+*.recipe
+*.lastbuildstate
+*.unsuccessfulbuild
+*.pch
