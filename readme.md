@@ -1,6 +1,10 @@
+<div align="center">
+
 ![Demo](resources/Demo.gif)
 
-# Animated Shapes
+# Geometric Shapes
+
+</div>
 
 A console C++ application that renders rotating geometric shapes with customizable parameters.
 
@@ -8,8 +12,8 @@ A console C++ application that renders rotating geometric shapes with customizab
 
 | Platform | Download Link |
 |----------|---------------|
-| Windows x64 | [geometric_shapes_x64.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/download/v1.1/geometric_shapes_x64.exe) |
-| Windows x86 | [geometric_shapes_x86.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/download/v1.1/geometric_shapes_x86.exe) |
+| Windows x64 | [geometric_shapes_x64.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/latest/download/geometric_shapes_x64.exe) |
+| Windows x86 | [geometric_shapes_x86.exe](https://github.com/ShulhaOleh/geometric_shapes/releases/latest/download/geometric_shapes_x86.exe) |
 
 ## System Requirements
 
