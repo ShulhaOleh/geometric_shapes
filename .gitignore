@@ -13,6 +13,7 @@ releases/
 *.pdb
 *.exe
 *.obj
+*.aps
 
 # VS temporary files
 .vs/
