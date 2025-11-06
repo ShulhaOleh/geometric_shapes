@@ -77,7 +77,7 @@ int main()
 
     auto frame_duration = std::chrono::milliseconds(1000 / fps);
 
-    for (long t = 0; running && t < 1000000; t++) {
+    for (long t = 0; running; t++) {
         int new_width = width;
         int new_height = height;
 

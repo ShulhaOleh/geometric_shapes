@@ -1,7 +1,6 @@
 # Build folders
-x64/
-Debug/
-Release/
+build/
+releases/
 
 # Visual Studio files
 *.user
