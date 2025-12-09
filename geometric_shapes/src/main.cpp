@@ -32,7 +32,7 @@ int main()
 
     // If the code is running on Windows, data from 
     // the console window is taken and set as the resolution
-    void set_window_resolution(int width, int height);
+    wcf::set_window_resolution(width, height);
 
     // For console's input line
     height -= 4;
@@ -187,9 +187,9 @@ int main()
 
         frame_buffer << "\x1b[" << (height + 4) << ";" << (3 + input_length) << "H";
 
-        wcf::hide_cursor();
+        // wcf::hide_cursor();
         std::cout << frame_buffer.str() << std::flush;
-        wcf::show_cursor();
+        // wcf::show_cursor();
 
         if (max_fps > 0) {
             auto frame_duration = std::chrono::milliseconds(1000 / max_fps);
