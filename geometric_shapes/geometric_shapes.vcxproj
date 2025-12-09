@@ -158,11 +158,13 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\input_handler.cpp" />
     <ClCompile Include="src\shapes.cpp" />
+    <ClCompile Include="src\wcf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\input_handler.h" />
     <ClInclude Include="includes\shapes.h" />
     <ClInclude Include="includes\resource.h" />
+    <ClInclude Include="includes\wcf.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

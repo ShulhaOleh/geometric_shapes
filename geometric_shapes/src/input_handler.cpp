@@ -51,12 +51,12 @@ void handle_square_command(const std::vector<std::string>& parts) {
     std::lock_guard<std::mutex> shape_lock(shape_mutex);
     current_shape = 0;
 
-    if (parts.size() > 1) {
-        float size;
-        if (try_parse_float(parts[1], size, 0.0f, 2.0f)) {
-            shape_size = size;
-        }
-    }
+    if (parts.size() <= 1) return;
+
+    float size;
+    
+    if (try_parse_float(parts[1], size, 0.0f, 2.0f))
+        shape_size = size;
 }
 
 // Command handler: switches to circle shape
@@ -64,12 +64,12 @@ void handle_circle_command(const std::vector<std::string>& parts) {
     std::lock_guard<std::mutex> shape_lock(shape_mutex);
     current_shape = 1;
 
-    if (parts.size() > 1) {
-        float radius;
-        if (try_parse_float(parts[1], radius, 0.0f, 2.0f)) {
-            shape_size = radius;
-        }
-    }
+    if (parts.size() <= 1) return;
+    
+    float radius;
+
+    if (try_parse_float(parts[1], radius, 0.0f, 2.0f))
+        shape_size = radius;
 }
 
 // Command handler: switches to rectangle shape

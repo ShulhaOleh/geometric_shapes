@@ -4,13 +4,13 @@
 #include <string>
 #include <atomic>
 #include <mutex>
-#include <windows.h>
 #include <conio.h>
 #include <sstream>
 #include <vector>
 
 #include "shapes.h"
 #include "input_handler.h"
+#include "wcf.h"
 
 std::atomic<bool> running(true);
 std::atomic<int> current_shape(0);
@@ -24,19 +24,6 @@ std::atomic<float> shape_height(0.375f);
 std::atomic<float> rotation_speed(0.005f);
 std::atomic<char> draw_char('*');
 
-// Gets current console dimensions
-// Returns true if successful, updates width and height parameters
-bool get_console_size(int& width, int& height) {
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-        width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-        height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-        return true;
-    }
-
-    return false;
-}
 
 int main()
 {
@@ -45,21 +32,22 @@ int main()
 
     // If the code is running on Windows, data from 
     // the console window is taken and set as the resolution
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-        width = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-        height = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-    }
-
-    // Hide cursor
-    std::cout << "\x1b[?25l";
+    void set_window_resolution(int width, int height);
 
     // For console's input line
     height -= 4;
 
     float aspect = (float)width / (float)height;
     float pixel_aspect = 11.0f / 24.0f;
-    int fps = 120; // Set lower number for better performance
+
+    // 0 == unlimited fps
+    // Set lower number for better performance
+    int max_fps = 0;
+    // fps count
+    float actual_fps = 0.0f;
+    float fps_update_timer = 0.0f;
+    int frame_count = 0;
+
     float speed = 0.05f;
     float const PI = 3.14159265359f;
     float angle = PI / 4;
@@ -75,14 +63,28 @@ int main()
 
     std::cout << "\x1b[2J";
 
-    auto frame_duration = std::chrono::milliseconds(1000 / fps);
+    auto last_time = std::chrono::high_resolution_clock::now();
+    float time_accumulator = 0.0f;
 
     for (long t = 0; running; t++) {
+        auto current_time = std::chrono::high_resolution_clock::now();
+        float delta_time = std::chrono::duration<float>(current_time - last_time).count();
+        last_time = current_time;
+        time_accumulator += delta_time;
+
+        frame_count++;
+        fps_update_timer += delta_time;
+        if (fps_update_timer >= 0.1f) {
+            actual_fps = frame_count / fps_update_timer;
+            frame_count = 0;
+            fps_update_timer = 0.0f;
+        }
+
         int new_width = width;
         int new_height = height;
 
         // Check for console size changes
-        if (!get_console_size(new_width, new_height)) {
+        if (!wcf::get_console_size(new_width, new_height)) {
             // Failed to get size, use current dimensions
             new_width = width;
             new_height = height;
@@ -103,7 +105,7 @@ int main()
             std::cout << "\x1b[2J";
         }
 
-        angle += rotation_speed.load() * aspect;
+        angle += rotation_speed.load() * aspect * delta_time * 50.0f;
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -113,7 +115,7 @@ int main()
 
                 x *= aspect * pixel_aspect;
 
-                x += sin(t * speed);
+                x += sin(time_accumulator * speed * 50.0f);
 
                 float xr = x * cos(angle) - y * sin(angle);
                 float yr = x * sin(angle) + y * cos(angle);
@@ -133,9 +135,13 @@ int main()
             }
         }
 
+        std::ostringstream frame_buffer;
+
         // Display Frame
-        std::cout << "\x1b[H";
-        std::cout << screen;
+        frame_buffer << "\x1b[H";
+        frame_buffer << screen;
+
+        frame_buffer << "\x1b[" << (height + 1) << ";1H";
 
         std::string status = "Status: ";
         int shape = current_shape.load();
@@ -149,13 +155,14 @@ int main()
 
         status += " | Speed: " + std::to_string(rotation_speed.load()).substr(0, 5);
         status += " | Symbol: '" + std::string(1, draw_char.load()) + "'";
-        std::cout << status;
-        for (int i = status.length(); i < width; i++) std::cout << " ";
-        std::cout << "\n";
+        status += " | FPS: " + std::to_string((int)actual_fps);
+        frame_buffer << status;
+        for (int i = status.length(); i < width; i++) frame_buffer << " ";
+        frame_buffer << "\n";
 
-        std::cout << "Shapes: square s [size] | circle c [radius] | rectangle r [w] [h]";
-        for (int i = 68; i < width; i++) std::cout << " ";
-        std::cout << "\n";
+        frame_buffer << "Shapes: square s [size] | circle c [radius] | rectangle r [w] [h]";
+        for (int i = 68; i < width; i++) frame_buffer << " ";
+        frame_buffer << "\n";
 
         std::string actions = "Actions: ";
         if (shape == 0)
@@ -166,22 +173,38 @@ int main()
             actions += "dim d [w] [h]";
         actions += " | speed sp [val] | char ch [c] | quit q";
 
-        std::cout << actions;
-        for (int i = actions.length(); i < width; i++) std::cout << " ";
-        std::cout << "\n";
+        frame_buffer << actions;
+        for (int i = actions.length(); i < width; i++) frame_buffer << " ";
+        frame_buffer << "\n";
 
-        std::lock_guard<std::mutex> lock(input_mutex);
-        std::cout << "> " << input_buffer;
-        for (int i = input_buffer.length(); i < width - 2; i++) std::cout << " ";
+        int input_length = 0;
+        {
+            std::lock_guard<std::mutex> lock(input_mutex);
+            frame_buffer << "> " << input_buffer;
+            input_length = input_buffer.length();
+            for (int i = input_length; i < width - 2; i++) frame_buffer << " ";
+        }
 
-        std::cout.flush();
-        std::this_thread::sleep_for(frame_duration);
+        frame_buffer << "\x1b[" << (height + 4) << ";" << (3 + input_length) << "H";
+
+        wcf::hide_cursor();
+        std::cout << frame_buffer.str() << std::flush;
+        wcf::show_cursor();
+
+        if (max_fps > 0) {
+            auto frame_duration = std::chrono::milliseconds(1000 / max_fps);
+            auto frame_end_time = last_time + frame_duration;
+
+            auto now = std::chrono::high_resolution_clock::now();
+            if (now < frame_end_time) {
+                std::this_thread::sleep_for(frame_end_time - now);
+            }
+        }
     }
 
     delete[] screen;
 
     std::cout << "\x1b[2J\x1b[H";
-    std::cout << "\x1b[?25h";
     std::cout << "Program terminated.\n";
     return 0;
 }
