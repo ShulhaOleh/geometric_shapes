@@ -58,5 +58,5 @@ A console C++ application that renders rotating geometric shapes with customizab
 4. Build the solution: `Ctrl+Shift+B`
 
 5. Find executable in:
-   - x64: `x64/Release/geometric_shapes.exe`
-   - x86: `Release/geometric_shapes.exe`
+   - x64: `build/x64/Release/geometric_shapes_x64.exe`
+   - x86: `build/Win32/Release/geometric_shapes_x86.exe`
