@@ -4,13 +4,16 @@
 #include <string>
 #include <atomic>
 #include <mutex>
-#include <conio.h>
 #include <sstream>
 #include <vector>
 
 #include "shapes.h"
 #include "input_handler.h"
+
+#ifdef _WIN32
+#include <conio.h>
 #include "wcf.h"
+#endif
 
 std::atomic<bool> running(true);
 std::atomic<int> current_shape(0);
@@ -27,12 +30,22 @@ std::atomic<char> draw_char('*');
 
 int main()
 {
+
     int width = 120;
     int height = 30;
 
-    // If the code is running on Windows, data from 
-    // the console window is taken and set as the resolution
-    wcf::set_window_resolution(width, height);
+#ifdef _WIN32
+    int temp_width = width;
+    int temp_height = height;
+    bool size_success = wcf::get_console_size(temp_width, temp_height);
+
+    if (size_success) {
+        width = temp_width;
+        height = temp_height;
+    }
+#elif __linux__
+	// for future linux code
+#endif
 
     // For console's input line
     height -= 4;
@@ -83,12 +96,18 @@ int main()
         int new_width = width;
         int new_height = height;
 
-        // Check for console size changes
-        if (!wcf::get_console_size(new_width, new_height)) {
-            // Failed to get size, use current dimensions
-            new_width = width;
-            new_height = height;
+#ifdef _WIN32
+        int temp_width = width;
+        int temp_height = height;
+        bool size_success = wcf::get_console_size(temp_width, temp_height);
+
+        if (size_success) {
+            new_width = temp_width;
+            new_height = temp_height;
         }
+#elif __linux__
+		// for future linux code
+#endif
 
         new_height -= 4; // Reserve space for UI elements
 

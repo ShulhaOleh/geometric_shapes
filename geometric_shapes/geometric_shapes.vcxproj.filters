@@ -39,9 +39,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
+    <ResourceCompile Include="geometric_shapes.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="geometric_shapes.rc" />
+    <None Include="..\.gitignore" />
   </ItemGroup>
 </Project>

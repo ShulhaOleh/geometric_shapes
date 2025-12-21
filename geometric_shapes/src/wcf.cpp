@@ -1,4 +1,4 @@
-// Windows Console Fuctions - set of functions to work with Windows Console throuh Windows API
+// Windows Console Fuctions (WCF) - set of functions to work with Windows Console throuh Windows API
 
 #include <windows.h>
 #include "wcf.h"
@@ -21,7 +21,6 @@ namespace wcf
         return false;
     }
 
-    // Data from the console window is taken and set as the resolution
     void set_window_resolution(int width, int height) {
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
