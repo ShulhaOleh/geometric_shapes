@@ -60,3 +60,7 @@ A console C++ application that renders rotating geometric shapes with customizab
 5. Find executable in:
    - x64: `build/x64/Release/geometric_shapes_x64.exe`
    - x86: `build/Win32/Release/geometric_shapes_x86.exe`
+
+## License
+
+This project is licensed under the MIT [License](LICENSE) — see the LICENSE file for details.
