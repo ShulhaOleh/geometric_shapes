@@ -11,8 +11,10 @@
 #include "input_handler.h"
 
 #ifdef _WIN32
-#include <conio.h>
-#include "wcf.h"
+    #include <conio.h>
+    #include "wcf.h"
+    #include  <windows.h>
+    #pragma comment(lib, "winmm.lib")
 #endif
 
 std::atomic<bool> running(true);
@@ -26,6 +28,7 @@ std::atomic<float> shape_width(0.75f);
 std::atomic<float> shape_height(0.375f);
 std::atomic<float> rotation_speed(0.005f);
 std::atomic<char> draw_char('*');
+std::atomic<int> max_fps(0); // 0 == unlimited fps
 
 
 int main()
@@ -35,6 +38,8 @@ int main()
     int height = 30;
 
 #ifdef _WIN32
+    timeBeginPeriod(2);
+
     int temp_width = width;
     int temp_height = height;
     bool size_success = wcf::get_console_size(temp_width, temp_height);
@@ -53,9 +58,6 @@ int main()
     float aspect = (float)width / (float)height;
     float pixel_aspect = 11.0f / 24.0f;
 
-    // 0 == unlimited fps
-    // Set lower number for better performance
-    int max_fps = 0;
     // fps count
     float actual_fps = 0.0f;
     float fps_update_timer = 0.0f;
@@ -175,6 +177,9 @@ int main()
         status += " | Speed: " + std::to_string(rotation_speed.load()).substr(0, 5);
         status += " | Symbol: '" + std::string(1, draw_char.load()) + "'";
         status += " | FPS: " + std::to_string((int)actual_fps);
+
+        if (max_fps > 0) status += "/" + std::to_string(max_fps.load());
+
         frame_buffer << status;
         for (int i = status.length(); i < width; i++) frame_buffer << " ";
         frame_buffer << "\n";
@@ -216,10 +221,21 @@ int main()
 
             auto now = std::chrono::high_resolution_clock::now();
             if (now < frame_end_time) {
-                std::this_thread::sleep_for(frame_end_time - now);
+                auto remaining = frame_end_time - now;
+
+                if (remaining > std::chrono::milliseconds(2)) {
+                    std::this_thread::sleep_for(remaining - std::chrono::milliseconds(1));
+                }
+
+                while (std::chrono::high_resolution_clock::now() < frame_end_time) { }
             }
         }
     }
+
+#ifndef _WIN32
+    timeEndPeriod(2);
+#endif 
+
 
     delete[] screen;
 

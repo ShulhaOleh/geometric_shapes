@@ -19,6 +19,8 @@ void handle_rectangle_command(const std::vector<std::string>& parts);
 void handle_speed_command(const std::vector<std::string>& parts);
 // Command handler: changes drawing symbol
 void handle_char_command(const std::vector<std::string>& parts);
+// Command handler: change maximum FPS
+void handle_max_fps_command(const std::vector<std::string>& parts);
 // Main command processor: parses and routes commands to appropriate handlers
 void process_command(const std::string& command);
 

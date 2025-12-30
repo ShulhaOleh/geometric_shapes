@@ -32,6 +32,7 @@ A console C++ application that renders rotating geometric shapes with customizab
 | `dim [width] [height]` | `d [width] [height]` | Update rectangle dimensions (only works for rectangle) | `d 1.5 0.6` |
 | `speed [value]` | `sp [value]` | Change rotation speed (0.0 - 0.1) | `speed 0.01` |
 | `char [symbol]` | `ch [symbol]` | Change drawing character | `char @` |
+| `maxfps [value]` | `fps [value]`, `mf [value]` | Set maximum FPS limit (0 = unlimited) | `fps 60` |
 | `quit` | `q` | Exit application | `q` |
 
 ## Building from Source
