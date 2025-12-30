@@ -19,6 +19,7 @@ extern std::mutex shape_mutex;
 extern std::mutex input_mutex;
 extern std::string input_buffer;
 extern std::atomic<char> draw_char;
+extern std::atomic<int> max_fps;
 
 // Splits a string into parts by a separator
 std::vector<std::string> split(const std::string& str, char delimiter) {
@@ -51,12 +52,12 @@ void handle_square_command(const std::vector<std::string>& parts) {
     std::lock_guard<std::mutex> shape_lock(shape_mutex);
     current_shape = 0;
 
-    if (parts.size() > 1) {
-        float size;
-        if (try_parse_float(parts[1], size, 0.0f, 2.0f)) {
-            shape_size = size;
-        }
-    }
+    if (parts.size() <= 1) return;
+
+    float size;
+    
+    if (try_parse_float(parts[1], size, 0.0f, 2.0f))
+        shape_size = size;
 }
 
 // Command handler: switches to circle shape
@@ -64,12 +65,12 @@ void handle_circle_command(const std::vector<std::string>& parts) {
     std::lock_guard<std::mutex> shape_lock(shape_mutex);
     current_shape = 1;
 
-    if (parts.size() > 1) {
-        float radius;
-        if (try_parse_float(parts[1], radius, 0.0f, 2.0f)) {
-            shape_size = radius;
-        }
-    }
+    if (parts.size() <= 1) return;
+    
+    float radius;
+
+    if (try_parse_float(parts[1], radius, 0.0f, 2.0f))
+        shape_size = radius;
 }
 
 // Command handler: switches to rectangle shape
@@ -143,6 +144,18 @@ void handle_dimensions_command(const std::vector<std::string>& parts) {
         shape_height = height;
 }
 
+// Command handler: change maximum FPS
+void handle_max_fps_command(const std::vector<std::string>& parts) {
+    if (parts.size() < 2) return;
+
+    try {
+        int fps = std::stoi(parts[1]);
+
+        if (fps >= 0) max_fps = fps;
+    }
+    catch (...) { }
+}
+
 
 // Main command processor: parses and routes commands to appropriate handlers
 void process_command(const std::string& command) {
@@ -175,6 +188,7 @@ void process_command(const std::string& command) {
         register_command(handle_char_command, { "char", "ch" });
 
         // Utility commands
+        register_command(handle_max_fps_command, { "maxfps", "fps", "mf" });
         register_command([](const auto&) { running = false; }, { "quit", "q" });
 
         return map;

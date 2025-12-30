@@ -32,6 +32,7 @@ A console C++ application that renders rotating geometric shapes with customizab
 | `dim [width] [height]` | `d [width] [height]` | Update rectangle dimensions (only works for rectangle) | `d 1.5 0.6` |
 | `speed [value]` | `sp [value]` | Change rotation speed (0.0 - 0.1) | `speed 0.01` |
 | `char [symbol]` | `ch [symbol]` | Change drawing character | `char @` |
+| `maxfps [value]` | `fps [value]`, `mf [value]` | Set maximum FPS limit (0 = unlimited) | `fps 60` |
 | `quit` | `q` | Exit application | `q` |
 
 ## Building from Source
@@ -58,8 +59,8 @@ A console C++ application that renders rotating geometric shapes with customizab
 4. Build the solution: `Ctrl+Shift+B`
 
 5. Find executable in:
-   - x64: `x64/Release/geometric_shapes.exe`
-   - x86: `Release/geometric_shapes.exe`
+   - x64: `build/x64/Release/geometric_shapes_x64.exe`
+   - x86: `build/Win32/Release/geometric_shapes_x86.exe`
 
 ## License
 
