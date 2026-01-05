@@ -27,9 +27,10 @@ A console C++ application that renders rotating geometric shapes with customizab
 | `square [size]` | `s [size]` | Switch to square shape with optional size | `s 0.8` |
 | `circle [radius]` | `c [radius]` | Switch to circle shape with optional radius | `c 0.6` |
 | `rectangle [width] [height]` | `r [width] [height]` | Switch to rectangle with optional dimensions | `r 1.2 0.5` |
+| `oval [width] [height]` | `o [width] [height]` | Switch to oval shape with optional dimensions | `oval 1 0` |
 | `size [value]` | `sz [value]` | Update square size (only works for square) | `sz 0.9` |
 | `radius [value]` | `rad [value]` | Update circle radius (only works for circle) | `rad 0.7` |
-| `dim [width] [height]` | `d [width] [height]` | Update rectangle dimensions (only works for rectangle) | `d 1.5 0.6` |
+| `dim [width] [height]` | `d [width] [height]` | Update dimensions (works for rectangle and oval) | `d 1.5 0.6` |
 | `speed [value]` | `sp [value]` | Change rotation speed (0.0 - 0.1) | `speed 0.01` |
 | `char [symbol]` | `ch [symbol]` | Change drawing character | `char @` |
 | `maxfps [value]` | `fps [value]`, `mf [value]` | Set maximum FPS limit (0 = unlimited) | `fps 60` |
