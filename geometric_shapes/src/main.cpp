@@ -149,6 +149,7 @@ int main()
                     if (current_shape == 0) pixel = square(xr, yr, shape_size.load()) ? ch : ' ';
                     else if (current_shape == 1) pixel = circle(xr, yr, shape_size.load()) ? ch : ' ';
                     else if (current_shape == 2) pixel = rectangle(xr, yr, shape_width.load(), shape_height.load()) ? ch : ' ';
+                    else if (current_shape == 3) pixel = oval(xr, yr, shape_width.load(), shape_height.load()) ? ch : ' ';
                 }
 
                 // If nothing else, draw an empty pixel
@@ -173,6 +174,9 @@ int main()
         else if (shape == 2)
             status += "Rectangle (w: " + std::to_string(shape_width.load()).substr(0, 4) +
             ", h: " + std::to_string(shape_height.load()).substr(0, 4) + ")";
+        else if (shape == 3)
+            status += "Oval (w: " + std::to_string(shape_width.load()).substr(0, 4) +
+            ", h: " + std::to_string(shape_height.load()).substr(0, 4) + ")";
 
         status += " | Speed: " + std::to_string(rotation_speed.load()).substr(0, 5);
         status += " | Symbol: '" + std::string(1, draw_char.load()) + "'";
@@ -184,8 +188,9 @@ int main()
         for (int i = status.length(); i < width; i++) frame_buffer << " ";
         frame_buffer << "\n";
 
-        frame_buffer << "Shapes: square s [size] | circle c [radius] | rectangle r [w] [h]";
-        for (int i = 68; i < width; i++) frame_buffer << " ";
+        std::string shapes_line = "Shapes: square s [size] | circle c [radius] | rectangle r [w] [h] | oval o [w] [h]";
+        frame_buffer << shapes_line;
+        for (int i = shapes_line.length(); i < width; i++) frame_buffer << " ";
         frame_buffer << "\n";
 
         std::string actions = "Actions: ";
@@ -194,6 +199,8 @@ int main()
         else if (shape == 1)
             actions += "radius rad [val]";
         else if (shape == 2)
+            actions += "dim d [w] [h]";
+        else if (shape == 3)
             actions += "dim d [w] [h]";
         actions += " | speed sp [val] | char ch [c] | quit q";
 

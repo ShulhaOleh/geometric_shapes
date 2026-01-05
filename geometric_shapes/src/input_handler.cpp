@@ -88,6 +88,20 @@ void handle_rectangle_command(const std::vector<std::string>& parts) {
         shape_height = height;
 }
 
+// Command handler: switches to oval shape
+void handle_oval_command(const std::vector<std::string>& parts) {
+    std::lock_guard<std::mutex> shape_lock(shape_mutex);
+    current_shape = 3;
+
+    float width;
+    float height;
+
+    if (parts.size() > 1 && try_parse_float(parts[1], width, 0.0f, 2.0f))
+        shape_width = width;
+    if (parts.size() > 2 && try_parse_float(parts[2], height, 0.0f, 2.0f))
+        shape_height = height;
+}
+
 // Command handler: adjusts rotation speed (NO shape change)
 void handle_speed_command(const std::vector<std::string>& parts) {
     float speed;
@@ -135,7 +149,7 @@ void handle_dimensions_command(const std::vector<std::string>& parts) {
 
     // Thread-safe check: only modify if current shape is rectangle
     std::lock_guard<std::mutex> shape_lock(shape_mutex);
-    if (current_shape.load() != 2) return;  // Not a rectangle, ignore
+    if (current_shape.load() != 2 && current_shape.load() != 3) return; // Not a rectangle or oval, ignore
 
     float width, height;
     if (parts.size() > 1 && try_parse_float(parts[1], width, 0.0f, 2.0f))
@@ -175,6 +189,7 @@ void process_command(const std::string& command) {
 
         // Shape-changing commands (handle their own locking)
         register_command(handle_square_command, { "square", "s" });
+		register_command(handle_oval_command, { "oval", "o" });
         register_command(handle_circle_command, { "circle", "c" });
         register_command(handle_rectangle_command, { "rectangle", "r" });
 

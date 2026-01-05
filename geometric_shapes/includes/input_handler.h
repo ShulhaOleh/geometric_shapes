@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef INPUT_HANDLER_H
-#define INPUT_HANDLER_H
-
 #include <string>
 #include <vector>
 
@@ -13,6 +10,8 @@ bool try_parse_float(const std::string& str, float& result, float min_val, float
 void handle_square_command(const std::vector<std::string>& parts);
 // Command handler: switches to circle shape
 void handle_circle_command(const std::vector<std::string>& parts);
+// Command handler: switches to oval shape
+void handle_oval_command(const std::vector<std::string>& parts);
 // Command handler: switches to rectangle shape
 void handle_rectangle_command(const std::vector<std::string>& parts);
 // Command handler: adjusts rotation speed
@@ -26,5 +25,3 @@ void process_command(const std::string& command);
 
 void handle_keypress(char ch);
 void input_thread();
-
-#endif
